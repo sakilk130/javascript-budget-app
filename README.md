@@ -1,9 +1,9 @@
 # Budget-App-JavaScript
- ## What I Learned
-    *Immediately Invoked Function Expression(IIFE)
-    *Closure
-    *Private data and Public data
-    *Encapsulation
+ ## What I Learned:
+   * Immediately Invoked Function Expression(IIFE)
+   * Closure
+   * Private data and Public data
+   * Encapsulation
 
 
 
