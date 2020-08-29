@@ -6,6 +6,7 @@
    * Encapsulation
    * Initialization Function
    * Function Constructor
+   * Avoid conflicts in data structure
 
 
 
