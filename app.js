@@ -1,6 +1,4 @@
-var budgetController = (function () {
-  //
-})();
+var budgetController = (function () {})();
 
 var UIController = (function () {
   var DOMstring = {
@@ -24,17 +22,29 @@ var UIController = (function () {
 })();
 
 var appController = (function (budgetCont, UICont) {
-  var DOM = UICont.getDOMstring();
-  var controlAddItem = function () {
-    var input = UICont.getInput();
-    console.log(input);
+  var setupEventListener = function () {
+    var DOM = UICont.getDOMstring();
+
+    document
+      .querySelector(DOM.addBtn)
+      .addEventListener("click", controlAddItem);
+    document.addEventListener("keypress", function (event) {
+      if (event === 13 || event.which === 13) {
+        controlAddItem();
+      }
+    });
   };
 
-  document.querySelector(DOM.addBtn).addEventListener("click", controlAddItem);
+  var controlAddItem = function () {
+    var input = UICont.getInput();
+  };
 
-  document.addEventListener("keypress", function (event) {
-    if (event === 13 || event.which === 13) {
-      controlAddItem();
-    }
-  });
+  return {
+    init: function () {
+      console.log("App Start");
+      setupEventListener();
+    },
+  };
 })(budgetController, UIController);
+
+appController.init();
