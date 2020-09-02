@@ -75,6 +75,17 @@ var UIController = (function () {
       newHtml = newHtml.replace("%value%", obj.value);
       document.querySelector(element).insertAdjacentHTML("beforeend", newHtml);
     },
+    clearFields: function () {
+      var fields, arrayFields;
+      fields = document.querySelectorAll(
+        DOMstring.addDescription + "," + DOMstring.addValue
+      );
+      arrayFields = Array.prototype.slice.call(fields);
+      arrayFields.forEach(function (current, index, array) {
+        current.value = "";
+      });
+      arrayFields[0].focus();
+    },
     getDOMstring: function () {
       return DOMstring;
     },
@@ -100,6 +111,7 @@ var appController = (function (budgetCont, UICont) {
     input = UICont.getInput();
     newItem = budgetCont.addItem(input.type, input.description, input.value);
     UICont.addListItem(newItem, input.type);
+    UICont.clearFields();
   };
 
   return {
