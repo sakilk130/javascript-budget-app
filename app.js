@@ -22,7 +22,7 @@ var budgetController = (function () {
   return {
     addItem: function (type, des, val) {
       var newItem, ID;
-      if (data.allItem[type] > 0) {
+      if (data.allItem[type].length > 0) {
         ID = data.allItem[type][data.allItem[type].length - 1].id + 1;
       } else {
         ID = 0;
@@ -47,7 +47,10 @@ var UIController = (function () {
     addDescription: ".add__description",
     addValue: ".add__value",
     addBtn: ".add__btn",
+    incomeContainer: ".income__list",
+    expensesContainer: ".expenses__list",
   };
+
   return {
     getInput: function () {
       return {
@@ -55,6 +58,22 @@ var UIController = (function () {
         description: document.querySelector(DOMstring.addDescription).value,
         value: document.querySelector(DOMstring.addValue).value,
       };
+    },
+    addListItem: function (obj, type) {
+      var html, newHtml, element;
+      if (type === "inc") {
+        element = DOMstring.incomeContainer;
+        html =
+          '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+      } else {
+        element = DOMstring.expensesContainer;
+        html =
+          '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div> <div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+      }
+      newHtml = html.replace("%id%", obj.id);
+      newHtml = newHtml.replace("%description%", obj.description);
+      newHtml = newHtml.replace("%value%", obj.value);
+      document.querySelector(element).insertAdjacentHTML("beforeend", newHtml);
     },
     getDOMstring: function () {
       return DOMstring;
@@ -80,6 +99,7 @@ var appController = (function (budgetCont, UICont) {
     var input, newItem;
     input = UICont.getInput();
     newItem = budgetCont.addItem(input.type, input.description, input.value);
+    UICont.addListItem(newItem, input.type);
   };
 
   return {
