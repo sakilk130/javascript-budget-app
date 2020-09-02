@@ -7,6 +7,8 @@
    * Initialization Function
    * Function Constructor
    * Avoid conflicts in data structure
+   * Adding HTML into the DOM
+   * DOM manipulation using the insertAdjacentHTML method
 
 
 
