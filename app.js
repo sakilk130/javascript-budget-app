@@ -56,7 +56,7 @@ var UIController = (function () {
       return {
         type: document.querySelector(DOMstring.inputType).value,
         description: document.querySelector(DOMstring.addDescription).value,
-        value: document.querySelector(DOMstring.addValue).value,
+        value: parseFloat(document.querySelector(DOMstring.addValue).value),
       };
     },
     addListItem: function (obj, type) {
@@ -105,13 +105,16 @@ var appController = (function (budgetCont, UICont) {
       }
     });
   };
-
+  var updateBudget = function () {};
   var controlAddItem = function () {
     var input, newItem;
     input = UICont.getInput();
-    newItem = budgetCont.addItem(input.type, input.description, input.value);
-    UICont.addListItem(newItem, input.type);
-    UICont.clearFields();
+    if (input.description !== "" && !isNaN(input.value)) {
+      newItem = budgetCont.addItem(input.type, input.description, input.value);
+      UICont.addListItem(newItem, input.type);
+      UICont.clearFields();
+      updateBudget();
+    }
   };
 
   return {
