@@ -16,6 +16,7 @@ var budgetController = (function () {
     });
     data.total[type] = sum;
   };
+
   var data = {
     allItem: {
       exp: [],
@@ -44,6 +45,19 @@ var budgetController = (function () {
       data.allItem[type].push(newItem);
       return newItem;
     },
+
+    deleteItem: function (type, id) {
+      var ids, index;
+
+      ids = data.allItem[type].map(function (current) {
+        return current.id;
+      });
+      index = ids.indexOf(id);
+      if (index !== -1) {
+        data.allItem[type].splice(index, 1);
+      }
+    },
+
     calculateBudget: function () {
       calculateTotal("exp");
       calculateTotal("inc");
@@ -176,7 +190,8 @@ var appController = (function (budgetCont, UICont) {
     if (itemID) {
       splitID = itemID.split("-");
       type = splitID[0];
-      ID = splitID[1];
+      ID = parseInt(splitID[1]);
+      budgetCont.deleteItem(type, ID);
     }
   };
   return {
