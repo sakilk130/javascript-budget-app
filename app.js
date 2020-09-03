@@ -122,6 +122,10 @@ var UIController = (function () {
       newHtml = newHtml.replace("%value%", obj.value);
       document.querySelector(element).insertAdjacentHTML("beforeend", newHtml);
     },
+    deleteListItem: function (selectorID) {
+      var el = document.getElementById(selectorID);
+      el.parentNode.removeChild(el);
+    },
     clearFields: function () {
       var fields, arrayFields;
       fields = document.querySelectorAll(
@@ -192,6 +196,8 @@ var appController = (function (budgetCont, UICont) {
       type = splitID[0];
       ID = parseInt(splitID[1]);
       budgetCont.deleteItem(type, ID);
+      UICont.deleteListItem(itemID);
+      updateBudget();
     }
   };
   return {
