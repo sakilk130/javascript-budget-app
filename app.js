@@ -1,10 +1,22 @@
 var budgetController = (function () {
-  var Income = function (id, description, value) {
+  var Expense = function (id, description, value) {
     this.id = id;
     this.description = description;
     this.value = value;
+    this.percentage = -1;
   };
-  var Expense = function (id, description, value) {
+
+  Expense.prototype.calcPerrcentage = function (totalIncome) {
+    if (totalIncome > 0) {
+      this.percentage = Math.round((this.value / totalIncome) * 100);
+    } else {
+      this.percentage = -1;
+    }
+  };
+  Expense.prototype.getPercentage = function () {
+    return this.percentage;
+  };
+  var Income = function (id, description, value) {
     this.id = id;
     this.description = description;
     this.value = value;
@@ -67,6 +79,17 @@ var budgetController = (function () {
       } else {
         data.percentage = -1;
       }
+    },
+    calculatePerrcentage: function () {
+      data.allItem.exp.forEach(function (cur) {
+        cur.calcPerrcentage(data.total.inc);
+      });
+    },
+    getPercentage: function () {
+      var allPercentage = data.allItem.exp.map(function (cur) {
+        return cur.getPercentage();
+      });
+      return allPercentage;
     },
     getBudget: function () {
       return {
@@ -177,7 +200,11 @@ var appController = (function (budgetCont, UICont) {
     var budget = budgetCont.getBudget();
     UICont.displayBudget(budget);
   };
-
+  var updatePercentage = function () {
+    budgetCont.calculatePerrcentage();
+    var percentage = budgetCont.getPercentage();
+    console.log(percentage);
+  };
   var controlAddItem = function () {
     var input, newItem;
     input = UICont.getInput();
@@ -186,6 +213,7 @@ var appController = (function (budgetCont, UICont) {
       UICont.addListItem(newItem, input.type);
       UICont.clearFields();
       updateBudget();
+      updatePercentage();
     }
   };
   var controlDeleteItem = function (event) {
@@ -198,6 +226,7 @@ var appController = (function (budgetCont, UICont) {
       budgetCont.deleteItem(type, ID);
       UICont.deleteListItem(itemID);
       updateBudget();
+      updatePercentage();
     }
   };
   return {
