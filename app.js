@@ -121,7 +121,21 @@ var UIController = (function () {
     container: ".container",
     expensesPercentageLabel: ".item__percentage",
   };
-
+  var formateNumber = function (num, type) {
+    var numSplit, int, dec;
+    num = Math.abs(num);
+    num = num.toFixed(2);
+    numSplit = num.split(".");
+    int = numSplit[0];
+    if (int.length > 3) {
+      int =
+        int.substring(0, int.length - 3) +
+        "," +
+        int.substring(int.length - 3, int.length);
+    }
+    dec = numSplit[1];
+    return (type === "exp" ? "-" : "+") + "" + int + "." + dec;
+  };
   return {
     getInput: function () {
       return {
@@ -143,7 +157,7 @@ var UIController = (function () {
       }
       newHtml = html.replace("%id%", obj.id);
       newHtml = newHtml.replace("%description%", obj.description);
-      newHtml = newHtml.replace("%value%", obj.value);
+      newHtml = newHtml.replace("%value%", formateNumber(obj.value, type));
       document.querySelector(element).insertAdjacentHTML("beforeend", newHtml);
     },
     deleteListItem: function (selectorID) {
@@ -162,10 +176,18 @@ var UIController = (function () {
       arrayFields[0].focus();
     },
     displayBudget: function (obj) {
-      document.querySelector(DOMstring.budgetLabel).textContent = obj.budget;
-      document.querySelector(DOMstring.incomeLabel).textContent = obj.totalInc;
-      document.querySelector(DOMstring.expensesLabel).textContent =
-        obj.totalExp;
+      obj.budget > 0 ? (type = "inc") : (type = "exp");
+      document.querySelector(DOMstring.budgetLabel).textContent = formateNumber(
+        obj.budget,
+        type
+      );
+      document.querySelector(DOMstring.incomeLabel).textContent = formateNumber(
+        obj.totalInc,
+        "inc"
+      );
+      document.querySelector(
+        DOMstring.expensesLabel
+      ).textContent = formateNumber(obj.totalExp, "exp");
 
       if (obj.percentage > 0) {
         document.querySelector(DOMstring.percentageLabel).textContent =
@@ -189,6 +211,7 @@ var UIController = (function () {
         }
       });
     },
+
     getDOMstring: function () {
       return DOMstring;
     },
